@@ -110,7 +110,7 @@ album_label = Label(root,textvariable = album)
 
 v=Scrollbar(root, orient='vertical')
 v.pack(side='right', fill='y')
-text=Text(root, font="Verdana 10", yscrollcommand=v.set)
+text=Text(root, font="Verdana 10", yscrollcommand=v.set, wrap=WORD)
 text.tag_configure("center", justify='center')
 text.tag_add("center", 1.0, "end")
 v.config(command=text.yview)
