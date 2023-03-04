@@ -2,6 +2,7 @@ import spotipy
 import spotipy.util as util
 from tkinter import *
 from tkinter.scrolledtext import *
+from azapi import AZlyrics
 
 import requests
 from bs4 import BeautifulSoup
@@ -93,28 +94,15 @@ def actualizar():
             text.insert(END, album_name+'\n\n')
 
 
-            
-            #getting the lyrics
+            api.artist = artist_name
+            api.title = track_name
 
-            #setting up the url according to azlyrics criteria
-            url = parse_url(artist_name, track_name)
-            request = requests.get(url)
-            
-            #si la pagina existe
-            if request.status_code != 404:
-                
-                html_text = request.content#text
-                #si uso text en vez de content tengo problemas con caracteres español
-                
-                soup = BeautifulSoup(html_text, 'html.parser')
-
-                lyrics_text = soup.find_all('div')[22].text #el div 22 tiene la letra
-
-                for i in lyrics_text:
+            try:
+                for i in api.getLyrics(save=False):
                     text.insert(END, i)
-                
-            else:
-                text.insert(END, 'no lyrics avaiable')
+            except:
+                text.insert(END, "No lyrics found")
+
             
     else:
         text.delete('1.0',END)
@@ -127,6 +115,7 @@ def actualizar():
 
 
 
+api = AZlyrics()
 
 username = 'sebacris97'
 client_id = '4809312ab757475e83bdf86881c70558'
