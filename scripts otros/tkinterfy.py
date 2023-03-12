@@ -13,16 +13,9 @@ class LyricsWindow(Tk):
         super().__init__()
 
         #self.API = azapi.AZlyrics()
-        GCS_API_KEY = 'AIzaSyCfPLivvWZu_rLf3dCceZMWxvNS6NQ2SVk'
-        GCS_ENGINE_ID = 'b68b26a7f065541a7'
-        self.API = SongLyrics(GCS_API_KEY, GCS_ENGINE_ID)
 
-        username = 'sebacris97'
-        client_id = '4809312ab757475e83bdf86881c70558'
-        client_secret = '883ba1bdd5fd4b63829a826160d05b90'
-        redirect_url = 'http://localhost:8888/callback'
-        scope = 'user-read-currently-playing'
-        self.sp = self.login_spotify(username,client_id,client_secret,redirect_url,scope)
+        self.API = self.setting_up_search_engine()
+        self.sp = self.setting_up_spotify()
 
         size = "345x410"
         window_title = "Current track info"
@@ -30,9 +23,23 @@ class LyricsWindow(Tk):
         self.configure_window(window_title,size,topmost)
 
         #recibe una ventana de parametro
-        self.song_title,self.album,self.artist, self.song_time = self.setting_up_window()
+        self.setting_up_window()
 
         self.actualizar()
+
+
+    def setting_up_search_engine(self):
+        GCS_API_KEY = 'AIzaSyCfPLivvWZu_rLf3dCceZMWxvNS6NQ2SVk'
+        GCS_ENGINE_ID = 'b68b26a7f065541a7'
+        return SongLyrics(GCS_API_KEY, GCS_ENGINE_ID)
+
+    def setting_up_spotify(self):
+        username = 'sebacris97'
+        client_id = '4809312ab757475e83bdf86881c70558'
+        client_secret = '883ba1bdd5fd4b63829a826160d05b90'
+        redirect_url = 'http://localhost:8888/callback'
+        scope = 'user-read-currently-playing'
+        return self.login_spotify(username,client_id,client_secret,redirect_url,scope)
     
     def login_spotify(self,username,client_id,client_secret,redirect_url,scope):
         # Set up credentials and authenticate with Spotify API
@@ -46,14 +53,14 @@ class LyricsWindow(Tk):
         self.attributes('-topmost', 'true') #que este siempre encima de todo
 
     def setting_up_window(self):
-        title = StringVar()
-        album = StringVar()
-        artist = StringVar()
-        song_time = StringVar()
-        title_label = Label(self,textvariable = title)
-        album_label = Label(self,textvariable = album)
-        artist_label = Label(self,textvariable = artist)
-        song_time_label = Label(self,textvariable = song_time)
+        self.song_title = StringVar()
+        self.album = StringVar()
+        self.artist = StringVar()
+        self.song_time = StringVar()
+        title_label = Label(self,textvariable = self.song_title)
+        album_label = Label(self,textvariable = self.album)
+        artist_label = Label(self,textvariable = self.artist)
+        song_time_label = Label(self,textvariable = self.song_time)
         self.lyrics_text = ScrolledText(self, wrap=WORD, font="Verdana 10")
         self.lyrics_text.bind("<Key>", lambda e: "break") #desactiva el escribir
         title_label.pack()
@@ -61,7 +68,6 @@ class LyricsWindow(Tk):
         artist_label.pack()
         song_time_label.pack()
         self.lyrics_text.pack()
-        return [title,album,artist,song_time]
 
     #imprimir minutos en formato mm:ss
     def tiempo(self,current_time, total_time):
