@@ -29,14 +29,14 @@ class LyricsWindow(Tk):
 
 
     def setting_up_search_engine(self):
-        GCS_API_KEY = 'AIzaSyCfPLivvWZu_rLf3dCceZMWxvNS6NQ2SVk'
-        GCS_ENGINE_ID = 'b68b26a7f065541a7'
+        GCS_API_KEY = '***'
+        GCS_ENGINE_ID = '***'
         return SongLyrics(GCS_API_KEY, GCS_ENGINE_ID)
 
     def setting_up_spotify(self):
-        username = 'sebacris97'
-        client_id = '4809312ab757475e83bdf86881c70558'
-        client_secret = '883ba1bdd5fd4b63829a826160d05b90'
+        username = '***'
+        client_id = '***'
+        client_secret = '***'
         redirect_url = 'http://localhost:8888/callback'
         scope = 'user-read-currently-playing'
         return self.login_spotify(username,client_id,client_secret,redirect_url,scope)
